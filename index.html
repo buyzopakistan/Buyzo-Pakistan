@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyzo - Premium Cosmetics & Beauty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefefe;
+        }
+        .royal-gold {
+            color: #D4AF37;
+        }
+        .bg-royal-gold {
+            background-color: #D4AF37;
+        }
+        .border-royal-gold {
+            border-color: #D4AF37;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9E6 100%);
+        }
+        .product-card {
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+            border-color: #D4AF37;
+        }
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #D4AF37;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold royal-gold">BUYZO</h1>
+                    <span class="text-xs text-gray-500 ml-2">Cosmetics</span>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-700 hover:text-yellow-700 font-medium">Home</a>
+                    <a href="#products" class="text-gray-700 hover:text-yellow-700 font-medium">Products</a>
+                    <a href="#hot" class="text-gray-700 hover:text-yellow-700 font-medium">Hot Deals</a>
+                    <a href="#offers" class="text-gray-700 hover:text-yellow-700 font-medium">Offers</a>
+                    <a href="#contact" class="text-gray-700 hover:text-yellow-700 font-medium">Contact</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search products..." class="px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold w-48">
+                        <div id="searchResults" class="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-lg mt-1 shadow-lg hidden z-50 max-h-60 overflow-y-auto"></div>
+                    </div>
+                    <button class="p-2 text-gray-600 hover:text-yellow-700">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="p-2 text-gray-600 hover:text-yellow-700 relative" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300">
+        <div class="p-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-bold">Your Cart</h3>
+            <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-4">
+            <div id="cartItems" class="space-y-4">
+                <!-- Cart items will appear here -->
+                <p class="text-gray-500 text-center">Your cart is empty</p>
+            </div>
+            <div class="mt-8 border-t pt-4">
+                <div class="flex justify-between mb-4">
+                    <span class="font-semibold">Total:</span>
+                    <span id="cartTotal" class="font-bold royal-gold">Rs 0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="w-full bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-3 rounded-lg transition-colors">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800">Premium Cosmetics <span class="royal-gold">Royal Quality</span></h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">Discover luxury beauty products crafted with excellence for the modern Pakistani consumer</p>
+            <a href="#products" class="bg-royal-gold text-white font-bold py-3 px-8 rounded-lg hover:bg-yellow-700 transition-colors inline-block">
+                Shop Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Hot Products Section -->
+    <section id="hot" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">🔥 Hot Products</h2>
+                <div class="flex items-center royal-gold">
+                    <span class="mr-2">Limited Stock</span>
+                    <i class="fas fa-fire"></i>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="lipstick" data-name="Royal Matte Lipstick Set">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center">
+                            <i class="fas fa-palette text-4xl royal-gold"></i>
+                        </div>
+                        <div class="discount-badge">HOT</div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Royal Matte Lipstick Set</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,899</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart" 
+                                data-product="Royal Matte Lipstick Set" 
+                                data-price="1899">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="serum" data-name="Diamond Glow Face Serum">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center">
+                            <i class="fas fa-gem text-4xl royal-gold"></i>
+                        </div>
+                        <div class="discount-badge">HOT</div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Diamond Glow Face Serum</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 2,499</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Diamond Glow Face Serum" 
+                                data-price="2499">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="eyeliner" data-name="Royal Kajal & Eyeliner Combo">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                            <i class="fas fa-eye text-4xl royal-gold"></i>
+                        </div>
+                        <div class="discount-badge">HOT</div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Royal Kajal & Eyeliner Combo</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,299</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Royal Kajal & Eyeliner Combo" 
+                                data-price="1299">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="cream" data-name="Luxury Face Cream & Toner">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+                            <i class="fas fa-spa text-4xl royal-gold"></i>
+                        </div>
+                        <div class="discount-badge">HOT</div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Luxury Face Cream & Toner</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 2,199</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Luxury Face Cream & Toner" 
+                                data-price="2199">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Section -->
+    <section id="offers" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">🎁 Special Offers</h2>
+                <div class="flex items-center royal-gold">
+                    <span class="mr-2">Limited Time</span>
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Offer 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="kit" data-name="Makeup Starter Kit">
+                    <div class="h-48 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center relative">
+                        <i class="fas fa-gift text-4xl royal-gold"></i>
+                        <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            50% OFF
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Makeup Starter Kit</h3>
+                        <p class="text-gray-600 text-sm mb-3">Complete makeup set for beginners</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <span class="text-gray-500 line-through text-sm">Rs 5,000</span>
+                                <span class="text-royal-gold font-bold text-lg ml-2">Rs 2,499</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Makeup Starter Kit" 
+                                data-price="2499">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Offer 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="nail" data-name="Premium Nail Polish Set">
+                    <div class="h-48 bg-gradient-to-br from-yellow-50 to-yellow-100 flex items-center justify-center relative">
+                        <i class="fas fa-crown text-4xl royal-gold"></i>
+                        <div class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            BUY 1 GET 1
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Premium Nail Polish Set</h3>
+                        <p class="text-gray-600 text-sm mb-3">12 colors + base & top coat</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <span class="text-gray-500 line-through text-sm">Rs 1,800</span>
+                                <span class="text-royal-gold font-bold text-lg ml-2">Rs 1,200</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Premium Nail Polish Set" 
+                                data-price="1200">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Offer 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="perfume" data-name="Luxury Perfume Collection">
+                    <div class="h-48 bg-gradient-to-br from-indigo-50 to-indigo-100 flex items-center justify-center relative">
+                        <i class="fas fa-star text-4xl royal-gold"></i>
+                        <div class="absolute top-4 left-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            FLAT 30% OFF
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Luxury Perfume Collection</h3>
+                        <p class="text-gray-600 text-sm mb-3">5 premium fragrances for her</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <span class="text-gray-500 line-through text-sm">Rs 4,500</span>
+                                <span class="text-royal-gold font-bold text-lg ml-2">Rs 3,150</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Luxury Perfume Collection" 
+                                data-price="3150">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">All Products</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="foundation" data-name="BB Cream & Foundation">
+                    <div class="h-48 bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center">
+                        <i class="fas fa-magic text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">BB Cream & Foundation</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,599</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="BB Cream & Foundation" 
+                                data-price="1599">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="facewash" data-name="Charcoal Face Wash">
+                    <div class="h-48 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                        <i class="fas fa-wind text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Charcoal Face Wash</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 899</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Charcoal Face Wash" 
+                                data-price="899">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="facewash" data-name="Rose Water Face Wash">
+                    <div class="h-48 bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center">
+                        <i class="fas fa-spa text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Rose Water Face Wash</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,199</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Rose Water Face Wash" 
+                                data-price="1199">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="serum" data-name="Vitamin C Serum">
+                    <div class="h-48 bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
+                        <i class="fas fa-sun text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Vitamin C Serum</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 2,299</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Vitamin C Serum" 
+                                data-price="2299">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="moisturizer" data-name="Hydrating Moisturizer">
+                    <div class="h-48 bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                        <i class="fas fa-tint text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Hydrating Moisturizer</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,799</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Hydrating Moisturizer" 
+                                data-price="1799">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="mask" data-name="Clay Face Mask">
+                    <div class="h-48 bg-gradient-to-br from-brown-50 to-brown-100 flex items-center justify-center">
+                        <i class="fas fa-mask text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Clay Face Mask</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,499</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Clay Face Mask" 
+                                data-price="1499">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="lipstick" data-name="Liquid Lipstick">
+                    <div class="h-48 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
+                        <i class="fas fa-lips text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Liquid Lipstick</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 1,099</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Liquid Lipstick" 
+                                data-price="1099">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden" data-category="eyeshadow" data-name="Eyeshadow Palette">
+                    <div class="h-48 bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center">
+                        <i class="fas fa-eye text-4xl royal-gold"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Eyeshadow Palette</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-royal-gold font-bold text-lg">Rs 2,899</span>
+                        </div>
+                        <button class="w-full mt-3 bg-royal-gold hover:bg-yellow-700 text-white font-semibold py-2 rounded-lg transition-colors add-to-cart"
+                                data-product="Eyeshadow Palette" 
+                                data-price="2899">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Order Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-royal-gold p-8 text-white">
+                        <h2 class="text-2xl font-bold mb-4">How to Order</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-white rounded-full p-2 mr-4 mt-1">
+                                    <i class="fas fa-shopping-cart royal-gold"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">1. Add to Cart</h3>
+                                    <p class="text-sm opacity-90">Browse products and add to cart</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-white rounded-full p-2 mr-4 mt-1">
+                                    <i class="fas fa-user royal-gold"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">2. Sign Up/Login</h3>
+                                    <p class="text-sm opacity-90">Create account or login to proceed</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-white rounded-full p-2 mr-4 mt-1">
+                                    <i class="fas fa-truck royal-gold"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">3. Delivery</h3>
+                                    <p class="text-sm opacity-90">We deliver across Pakistan within 3-5 days</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h3 class="font-semibold mb-2">Contact Us Directly:</h3>
+                            <a href="https://wa.me/923002556449" class="flex items-center bg-white text-royal-gold font-bold py-2 px-4 rounded-lg mb-2">
+                                <i class="fab fa-whatsapp mr-2"></i> WhatsApp: +92 300 2556449
+                            </a>
+                            <p class="text-sm opacity-90 mt-4">We're available 9 AM - 10 PM, 7 days a week</p>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-gray-800">Shipping Information</h2>
+                        <div id="loginRequired" class="text-center py-8">
+                            <i class="fas fa-lock text-4xl royal-gold mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">Login Required</h3>
+                            <p class="text-gray-600 mb-4">Please login or create an account to proceed with your order</p>
+                            <button onclick="showLoginModal()" class="bg-royal-gold hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+                                Login / Sign Up
+                            </button>
+                        </div>
+                        <form id="orderForm" class="hidden">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="name">Full Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="email">Email Address</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="address">Delivery Address</label>
+                                <textarea id="address" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="city">City</label>
+                                <input type="text" id="city" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                            </div>
+                            <button type="submit" class="w-full bg-royal-gold hover:bg-yellow-700 text-white font-bold py-3 rounded-lg transition-colors">
+                                Complete Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Returns & Exchanges Page -->
+    <section id="returns" class="py-16 bg-white hidden">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Returns & Exchanges</h2>
+            
+            <div class="bg-gray-50 rounded-lg p-8">
+                <div class="text-center mb-8">
+                    <i class="fas fa-exchange-alt text-4xl royal-gold mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">Return Policy</h3>
+                    <p class="text-gray-600">We want you to be completely satisfied with your purchase</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">📦 How to Return a Product</h4>
+                        <p class="text-gray-600">If you're not satisfied with your purchase, you can return it within 7 days of delivery.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">⏰ Return Period</h4>
+                        <p class="text-gray-600">7 days from the date of delivery</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">💳 Refund Process</h4>
+                        <p class="text-gray-600">Refunds will be processed within 3-5 business days after we receive the returned item.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">🚫 Non-Returnable Items</h4>
+                        <ul class="text-gray-600 list-disc list-inside">
+                            <li>Opened cosmetic products</li>
+                            <li>Personal care items</li>
+                            <li>Sale items</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8 p-6 bg-royal-gold text-white rounded-lg">
+                    <h4 class="font-bold text-lg mb-2">Need Help with Returns?</h4>
+                    <p class="mb-4">Contact us directly on WhatsApp for quick assistance</p>
+                    <a href="https://wa.me/923002556449" class="inline-flex items-center bg-white text-royal-gold font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fab fa-whatsapp mr-2"></i> Contact on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">About Buyzo</h3>
+                    <p class="text-gray-300 text-sm">Premium cosmetics with royal quality. Your trusted beauty destination in Pakistan.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+                        <li><a href="#" onclick="showReturnsPage()" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="#hot" class="hover:text-white transition-colors">Hot Products</a></li>
+                        <li><a href="#offers" class="hover:text-white transition-colors">Special Offers</a></li>
+                        <li><a href="#products" class="hover:text-white transition-colors">All Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors text-xl">
+                            <i class="fab fa-facebook"><i>
+                                
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors text-xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors text-xl">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://wa.me/923002556449" class="text-gray-300 hover:text-white transition-colors text-xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-300">Phone: +92 300 2556449</p>
+                        <p class="text-sm text-gray-300">Email: info@buyzo.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-300">
+                <p>&copy; 2024 Buyzo Cosmetics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login/Signup Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800">Login / Sign Up</h3>
+                <button onclick="hideLoginModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="authForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="authEmail">Email Address</label>
+                    <input type="email" id="authEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="authPassword">Password</label>
+                    <input type="password" id="authPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-royal-gold" required>
+                </div>
+                <div class="mb-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="rememberMe" class="mr-2">
+                        <span class="text-sm text-gray-600">Remember me</span>
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-royal-gold hover:bg-yellow-700 text-white font-bold py-3 rounded-lg transition-colors mb-4">
+                    Login
+                </button>
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">Don't have an account? <button type="button" onclick="switchToSignup()" class="text-royal-gold hover:underline">Sign up</button></p>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button onclick="signInWithGoogle()" class="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        <i class="fab fa-google text-red-500 mr-2"></i>
+                        Sign in with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md mx-4">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-500 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Order Received!</h3>
+                <p class="text-gray-600 mb-6">Thank you for your order. We'll contact you shortly on WhatsApp to confirm details.</p>
+                <button onclick="hideSuccessModal()" class="bg-royal-gold text-white font-semibold py-2 px-6 rounded-lg hover:bg-yellow-700 transition-colors">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product Data for Search
+        const products = [
+            { name: "Royal Matte Lipstick Set", category: "lipstick", price: "Rs 1,899" },
+            { name: "Diamond Glow Face Serum", category: "serum", price: "Rs 2,499" },
+            { name: "Royal Kajal & Eyeliner Combo", category: "eyeliner", price: "Rs 1,299" },
+            { name: "Luxury Face Cream & Toner", category: "cream", price: "Rs 2,199" },
+            { name: "Makeup Starter Kit", category: "kit", price: "Rs 2,499" },
+            { name: "Premium Nail Polish Set", category: "nail", price: "Rs 1,200" },
+            { name: "Luxury Perfume Collection", category: "perfume", price: "Rs 3,150" },
+            { name: "BB Cream & Foundation", category: "foundation", price: "Rs 1,599" },
+            { name: "Charcoal Face Wash", category: "facewash", price: "Rs 899" },
+            { name: "Rose Water Face Wash", category: "facewash", price: "Rs 1,199" },
+            { name: "Vitamin C Serum", category: "serum", price: "Rs 2,299" },
+            { name: "Hydrating Moisturizer", category: "moisturizer", price: "Rs 1,799" },
+            { name: "Clay Face Mask", category: "mask", price: "Rs 1,499" },
+            { name: "Liquid Lipstick", category: "lipstick", price: "Rs 1,099" },
+            { name: "Eyeshadow Palette", category: "eyeshadow", price: "Rs 2,899" }
+        ];
+
+        // Shopping Cart
+        let cart = [];
+        let isLoggedIn = false;
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (searchTerm.length < 2) {
+                resultsContainer.classList.add('hidden');
+                return;
+            }
+            
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredProducts.length > 0) {
+                resultsContainer.innerHTML = filteredProducts.map(product => `
+                    <div class="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectProduct('${product.name}')">
+                        <div class="font-medium">${product.name}</div>
+                        <div class="text-sm text-gray-500">${product.category} • ${product.price}</div>
+                    </div>
+                `).join('');
+                resultsContainer.classList.remove('hidden');
+            } else {
+                resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No products found</div>';
+                resultsContainer.classList.remove('hidden');
+            }
+        });
+
+        function selectProduct(productName) {
+            document.getElementById('searchInput').value = productName;
+            document.getElementById('searchResults').classList.add('hidden');
+            
+            // Scroll to and highlight the product
+            const productElements = document.querySelectorAll('.product-card');
+            productElements.forEach(element => {
+                if (element.getAttribute('data-name') === productName) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    element.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.5)';
+                    setTimeout(() => {
+                        element.style.boxShadow = '';
+                    }, 2000);
+                }
+            });
+        }
+
+        // Cart Functionality
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            cartSidebar.classList.toggle('translate-x-full');
+            updateCartDisplay();
+        }
+
+        function addToCart(productName, price) {
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+
+            const existingItem = cart.find(item => item.name === productName);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-500 text-center">Your cart is empty</p>';
+                cartTotal.textContent = 'Rs 0';
+                return;
+            }
+            
+            let total = 0;
+            cartItems.innerHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                return `
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <div>
+                            <div class="font-medium">${item.name}</div>
+                            <div class="text-sm text-gray-500">Rs ${item.price} x ${item.quantity}</div>
+                        </div>
+                        <div class="font-bold royal-gold">Rs ${itemTotal}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            cartTotal.textContent = `Rs ${total}`;
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            if (!isLoggedIn) {
+                showLoginModal();
+                return;
+            }
+            
+            document.getElementById('orderForm').classList.remove('hidden');
+            document.getElementById('loginRequired').classList.add('hidden');
+            toggleCart();
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Authentication
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function signInWithGoogle() {
+            // Simulate Google sign in
+            isLoggedIn = true;
+            localStorage.setItem('buyzo_user', JSON.stringify({
+                email: 'user@gmail.com',
+                name: 'Google User',
+                method: 'google'
+            }));
+            hideLoginModal();
+            updateAuthState();
+            alert('Successfully signed in with Google!');
+        }
+
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            
+            // Simple validation
+            if (email && password) {
+                isLoggedIn = true;
+                localStorage.setItem('buyzo_user', JSON.stringify({
+                    email: email,
+                    name: email.split('@')[0],
+                    method: 'email'
+                }));
+                hideLoginModal();
+                updateAuthState();
+                alert('Successfully logged in!');
+            }
+        });
+
+        function updateAuthState() {
+            if (isLoggedIn) {
+                document.getElementById('orderForm').classList.remove('hidden');
+                document.getElementById('loginRequired').classList.add('hidden');
+            }
+        }
+
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem('buyzo_user');
+        if (savedUser) {
+            isLoggedIn = true;
+            updateAuthState();
+        }
+
+        // Order Form Submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            
+            // Create order summary
+            let orderSummary = `New Order from Buyzo:%0A%0A`;
+            orderSummary += `Customer: ${name}%0A`;
+            orderSummary += `Email: ${email}%0A`;
+            orderSummary += `Phone: ${phone}%0A`;
+            orderSummary += `Address: ${address}, ${city}%0A%0A`;
+            orderSummary += `Order Details:%0A`;
+            
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                orderSummary += `- ${item.name} (Qty: ${item.quantity}) - Rs ${itemTotal}%0A`;
+            });
+            
+            orderSummary += `%0ATotal Amount: Rs ${total}`;
+            
+            // Save order to localStorage (for admin viewing)
+            const orders = JSON.parse(localStorage.getItem('buyzo_orders') || '[]');
+            orders.push({
+                id: Date.now(),
+                customer: { name, email, phone, address, city },
+                items: [...cart],
+                total: total,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('buyzo_orders', JSON.stringify(orders));
+            
+            // Open WhatsApp
+            window.open(`https://wa.me/923002556449?text=${orderSummary}`, '_blank');
+            
+            // Show success modal
+            document.getElementById('successModal').classList.remove('hidden');
+            
+            // Clear cart and form
+            cart = [];
+            this.reset();
+            updateCartDisplay();
+        });
+
+        function hideSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        // Returns Page
+        function showReturnsPage() {
+            document.getElementById('returns').classList.remove('hidden');
+            document.getElementById('returns').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add event listeners to Add to Cart buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    const price = parseInt(this.getAttribute('data-price'));
+                    addToCart(product, price);
+                });
+            });
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#searchInput') && !e.target.closest('#searchResults')) {
+                document.getElementById('searchResults').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
